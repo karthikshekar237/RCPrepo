@@ -2,7 +2,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 5.76"
+      version = "~> 5.88"
     }
   }
   # Optional: Configure remote state backend (update with your bucket details)
@@ -16,15 +16,13 @@ terraform {
 }
 
 provider "aws" {
-  region = "us-east-1"
+  region = "ap-southeast-2"
 }
 
 resource "aws_organizations_organization" "org" {
   feature_set          = "ALL"
   enabled_policy_types = [
-    "AISERVICES_OPT_OUT_POLICY",
-    "SERVICE_CONTROL_POLICY",
-    "RESOURCE_CONTROL_POLICY",
+    "RESOURCE_CONTROL_POLICY"
   ]
 }
 
@@ -33,36 +31,15 @@ data "aws_iam_policy_document" "rcp1" {
     effect = "Deny"
 
     actions = [
-      "s3:*",
-      "sqs:*",
-      "kms:*",
-      "secretsmanager:*",
-      "sts:*",
+      "s3:PutBucketPolicy"
     ]
-    resources = ["*"]
+    resources = [ "arn:aws:s3:::rcpbucketfortest2"]
 
     principals {
       type        = "*"
       identifiers = ["*"]
     }
 
-    condition {
-      test     = "StringNotEqualsIfExists"
-      variable = "aws:SourceOrgID"
-      values   = [aws_organizations_organization.org.id]
-    }
-
-    condition {
-      test     = "Null"
-      variable = "aws:SourceAccount"
-      values   = ["false"]
-    }
-
-    condition {
-      test     = "Bool"
-      variable = "aws:PrincipalIsAWSService"
-      values   = ["true"]
-    }
   }
 }
 
@@ -72,12 +49,22 @@ resource "aws_organizations_policy" "rcp1" {
   type    = "RESOURCE_CONTROL_POLICY"
 }
 
-resource "aws_organizations_organizational_unit" "dev" {
-  name      = "dev"
+resource "aws_organizations_organizational_unit" "testapp" {
+  name      = "origin-test-apps"
   parent_id = aws_organizations_organization.org.roots[0].id
 }
 
-resource "aws_organizations_policy_attachment" "rcp1_dev" {
+resource "aws_organizations_organizational_unit" "testusers" {
+  name      = "origin-test-users"
+  parent_id = aws_organizations_organization.org.roots[0].id
+}
+
+resource "aws_organizations_policy_attachment" "rcp1_testapp" {
   policy_id = aws_organizations_policy.rcp1.id
-  target_id = aws_organizations_organizational_unit.dev.id
+  target_id = aws_organizations_organizational_unit.testapp.id
+}
+
+resource "aws_organizations_policy_attachment" "rcp1_testusers" {
+  policy_id = aws_organizations_policy.rcp1.id
+  target_id = aws_organizations_organizational_unit.testusers.id
 }
