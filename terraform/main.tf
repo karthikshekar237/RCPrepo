@@ -19,12 +19,12 @@ provider "aws" {
   region = "ap-southeast-2"
 }
 
-resource "aws_organizations_organization" "org" {
-  feature_set          = "ALL"
-  enabled_policy_types = [
-    "RESOURCE_CONTROL_POLICY"
-  ]
-}
+# resource "aws_organizations_organization" "org" {
+#   feature_set          = "ALL"
+#   enabled_policy_types = [
+#     "RESOURCE_CONTROL_POLICY"
+#   ]
+# }
 
 data "aws_iam_policy_document" "rcp1" {
   statement {
