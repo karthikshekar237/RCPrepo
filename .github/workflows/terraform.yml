@@ -3,7 +3,7 @@ name: Terraform Deployment
 on:
   push:
     branches:
-      - main       # Adjust if needed (e.g., 'development')
+      - main
   pull_request:
     branches:
       - main
@@ -27,7 +27,7 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
         with:
-          terraform_version: '1.4.0'  # Change version as needed
+          terraform_version: "1.4.0"  # update as needed
 
       - name: Terraform Init
         working-directory: terraform

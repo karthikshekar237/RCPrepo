@@ -49,22 +49,22 @@ resource "aws_organizations_policy" "rcp1" {
   type    = "RESOURCE_CONTROL_POLICY"
 }
 
-resource "aws_organizations_organizational_unit" "testapp" {
-  name      = "origin-test-apps"
-  parent_id = aws_organizations_organization.org.roots[0].id
-}
+# resource "aws_organizations_organizational_unit" "testapp" {
+#   name      = "origin-test-apps"
+#   parent_id = aws_organizations_organization.org.roots[0].id
+# }
 
-resource "aws_organizations_organizational_unit" "testusers" {
-  name      = "origin-test-users"
-  parent_id = aws_organizations_organization.org.roots[0].id
-}
+# resource "aws_organizations_organizational_unit" "testusers" {
+#   name      = "origin-test-users"
+#   parent_id = aws_organizations_organization.org.roots[0].id
+# }
 
-resource "aws_organizations_policy_attachment" "rcp1_testapp" {
-  policy_id = aws_organizations_policy.rcp1.id
-  target_id = aws_organizations_organizational_unit.testapp.id
-}
+# resource "aws_organizations_policy_attachment" "rcp1_testapp" {
+#   policy_id = aws_organizations_policy.rcp1.id
+#   target_id = aws_organizations_organizational_unit.testapp.id
+# }
 
-resource "aws_organizations_policy_attachment" "rcp1_testusers" {
-  policy_id = aws_organizations_policy.rcp1.id
-  target_id = aws_organizations_organizational_unit.testusers.id
-}
+# resource "aws_organizations_policy_attachment" "rcp1_testusers" {
+#   policy_id = aws_organizations_policy.rcp1.id
+#   target_id = aws_organizations_organizational_unit.testusers.id
+# }
