@@ -9,7 +9,7 @@ terraform {
   backend "s3" {
     bucket         = "terraformstateforrcp"
     key            = "rcp/terraform.tfstate"
-    region         = "us-east-1"
+    region         = "ap-southeast-2"
     dynamodb_table = "terraformrcplocktable"
     encrypt        = true
   }
